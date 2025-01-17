@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Real Estate Proposal - Landmark Development Pvt Ltd</title>
+
+  <!-- Google Font: Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Frappe Gantt CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.css">
+  
+  <!-- Frappe Gantt JS -->
+  <script src="https://cdn.jsdelivr.net/npm/frappe-gantt/dist/frappe-gantt.min.js"></script>
+
+  <style>
+    :root {
+      /* Dark Mode Variables */
+      --background-color: #1F2933;
+      --card-color: #222B35;
+      --accent-color: #0EAC9F; /* Changed from gold to a teal color for better contrast */
+      --text-color: #F4F6F8;
+      --border-color: #333B47;
+      --font-family: 'Montserrat', sans-serif;
+
+      /* Slider dimension */
+      --slider-width: 600px;
+      --slider-height: 300px;
+    }
+
+    /* Light Mode Variables */
+    .light-mode {
+      --background-color: #FFFFFF; /* White background */
+      --card-color: #F9F9F9; /* Light card */
+      --accent-color: #DAA520; /* Bright Gold */
+      --text-color: #333333; /* Dark text */
+      --border-color: #E0E0E0; /* Light border */
+    }
+
+    /* RESET & BODY */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: var(--font-family);
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--accent-color);
+      transition: color 0.3s ease;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* COVER PAGE */
+    .cover-page {
+      min-height: 100vh;
+      background: linear-gradient(to bottom right, var(--accent-color) 30%, var(--background-color) 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: var(--text-color);
+      padding: 3rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s ease;
+    }
+    .cover-page h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1.2s ease forwards 0.2s;
+      color: var(--accent-color);
+    }
+    /* Adjust h1 color in dark mode */
+    body:not(.light-mode) .cover-page h1 {
+      color: var(--text-color);
+    }
+    body.light-mode .cover-page h1 {
+      color: #333333; /* Changed from var(--accent-color) to dark gray for better readability */
+    }
+    .cover-page p {
+      max-width: 600px;
+      margin: 0.5rem auto;
+      line-height: 1.6;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1.2s ease forwards 0.5s;
+    }
+    .btn-cover {
+      margin-top: 2rem;
+      background-color: var(--accent-color);
+      color: #FFFFFF;
+      font-weight: 700;
+      padding: 0.8rem 1.5rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 1.2s ease forwards 0.8s;
+    }
+    .btn-cover:hover {
+      background-color: #0D8C86; /* Darker teal on hover */
+    }
+
+    /* HEADER & NAV */
+    header {
+      background-color: var(--background-color);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background-color 0.3s ease;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+    nav ul li a {
+      color: var(--text-color);
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover {
+      color: var(--accent-color);
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .theme-toggle input {
+      display: none;
+    }
+    .theme-toggle label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background-color: #ccc;
+      border-radius: 12px;
+      transition: background-color 0.3s ease;
+    }
+    .theme-toggle label::before {
+      content: '🌙'; /* Moon icon */
+      position: absolute;
+      left: 6px;
+      font-size: 16px;
+    }
+    .theme-toggle label::after {
+      content: '☀️'; /* Sun icon */
+      position: absolute;
+      right: 6px;
+      font-size: 16px;
+    }
+    .theme-toggle input:checked + label {
+      background-color: var(--accent-color);
+    }
+    .theme-toggle input:checked + label::after {
+      transform: translateX(26px);
+    }
+
+    /* Sections */
+    section {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    section h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid var(--accent-color);
+      padding-left: 0.5rem;
+      color: var(--text-color);
+    }
+    .section-content {
+      background-color: var(--card-color);
+      padding: 1.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .section-content h3 {
+      color: var(--accent-color);
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    /* Two-Column Layout */
+    .pricing-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+    .pricing-column {
+      flex: 1 1 300px;
+      background-color: var(--card-color);
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .pricing-column h4 {
+      margin-bottom: 0.5rem;
+      color: var(--accent-color);
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      color: var(--text-color);
+    }
+    table th, table td {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    table thead {
+      background-color: var(--accent-color); /* Muted Gold in Dark Mode */
+      color: #FFFFFF;
+    }
+    /* Adjust table header color in light mode if needed */
+    body.light-mode table thead {
+      background-color: var(--accent-color);
+      color: #FFFFFF;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 4px;
+      background-color: var(--accent-color);
+      color: #FFFFFF;
+      font-weight: 600;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #0D8C86; /* Darker teal on hover */
+    }
+
+    /* Mortgage & Toggles */
+    #tenYearBreakdown {
+      display: none;
+      margin-top: 1rem;
+      background-color: var(--card-color);
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    #mortgageSection {
+      display: none;
+      margin-top: 1rem;
+      background-color: var(--card-color);
+      padding: 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .mortgage-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+      max-width: 500px;
+    }
+    .downPaymentContainer {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    #downPaymentRange {
+      flex: 1; 
+      cursor: pointer;
+    }
+    #downPaymentLabel {
+      min-width: 45px;
+      text-align: right;
+      color: var(--text-color);
+    }
+
+    /* Slider for images */
+    .slider-container {
+      width: var(--slider-width);
+      height: var(--slider-height);
+      margin: 1rem auto;
+      overflow: hidden;
+      position: relative;
+      /* Removed border */
+      border: none;
+      border-radius: 6px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      background-color: var(--card-color);
+    }
+    .slider-wrapper {
+      display: flex;
+      width: calc(var(--slider-width) * 4);
+      height: var(--slider-height);
+      transition: transform 0.6s ease;
+    }
+    .slider-slide {
+      width: var(--slider-width);
+      height: var(--slider-height);
+      flex-shrink: 0;
+      position: relative;
+    }
+    .slider-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Changed to contain for better image display */
+      opacity: 0;
+      animation: fadeInSlide 0.8s forwards;
+      border-radius: 6px;
+      /* Removed border */
+      border: none;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .slider-container:hover .slider-nav {
+      opacity: 1;
+      visibility: visible;
+    }
+    .slider-nav button {
+      background-color: rgba(14, 172, 159, 0.8); /* Semi-transparent teal */
+      color: #FFFFFF;
+      border: none;
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+      /* Initially hidden */
+      opacity: 0;
+      visibility: hidden;
+    }
+    .slider-container:hover .slider-nav button {
+      opacity: 1;
+      visibility: visible;
+    }
+    .slider-nav button:hover {
+      background-color: rgba(13, 140, 134, 0.8); /* Darker teal on hover */
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--background-color);
+      text-align: center;
+      padding: 1rem 1.5rem;
+      color: var(--text-color);
+      position: relative;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Print Button (placed near the footer) */
+    .print-btn {
+      display: inline-block;
+      margin-top: 1rem;
+      background-color: var(--accent-color);
+      color: #FFFFFF;
+      font-weight: 600;
+      border: none;
+      border-radius: 4px;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .print-btn:hover {
+      background-color: #0D8C86; /* Darker teal on hover */
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes fadeInSlide {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* Our "reveal" class for IntersectionObserver */
+    .reveal {
+      opacity: 0; 
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Once the .slider-container has the "active" class, it fades in */
+    .slider-container.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* @media print: Make it A4-friendly */
+    @media print {
+      @page {
+        size: A4;
+        margin: 20mm;
+      }
+      /* Hide certain interactive elements if desired */
+      .btn, .btn-cover, .print-btn, .slider-nav, .theme-toggle {
+        display: none !important;
+      }
+      /* Hide header */
+      header {
+        display: none;
+      }
+      /* Ensure backgrounds and colors are printed correctly */
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      /* Adjust text and background colors for print */
+      body, 
+      .section-content, 
+      .pricing-column, 
+      #mortgageSummaryRow, 
+      footer {
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+      }
+      a {
+        color: #0000EE !important;
+        text-decoration: underline;
+      }
+      table, th, td {
+        border: 1px solid #000000 !important;
+      }
+      table thead {
+        background-color: #dddddd !important;
+        color: #000000 !important;
+      }
+      body.light-mode table thead {
+        background-color: #dddddd !important;
+        color: #000000 !important;
+      }
+      /* Remove shadows and backgrounds */
+      .cover-page, .section-content, .pricing-column, footer, .slider-container {
+        box-shadow: none !important;
+        background-image: none !important;
+      }
+      /* Ensure images are printed clearly */
+      img {
+        max-width: 100% !important;
+        height: auto !important;
+      }
+    }
+
+    /* Responsive */
+    @media screen and (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .mortgage-inputs {
+        grid-template-columns: 1fr;
+      }
+      .slider-container {
+        width: 100%;
+        max-width: 95%;
+        height: auto;
+      }
+      .slider-wrapper {
+        width: calc(var(--slider-width) * 2); /* Adjusted for fewer slides on mobile */
+      }
+      .pricing-container {
+        flex-direction: column;
+      }
+      /* Adjust Gantt chart for mobile */
+      #ganttChart {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body class="dark-mode" onload="init()">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">Landmark Development Pvt Ltd</div>
+    <nav>
+      <ul>
+        <li><a href="#execSummary">Summary</a></li>
+        <li><a href="#location">Location</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#roiSection">ROI</a></li>
+        <li><a href="#exit">Exit Strategy</a></li>
+        <li><a href="#devProfile">About Us</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+      </ul>
+    </nav>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+      <input type="checkbox" id="themeSwitch">
+      <label for="themeSwitch"></label>
+    </div>
+  </header>
+
+  <!-- COVER PAGE -->
+  <div class="cover-page">
+    <h1>Urban Hub by Landmark</h1>
+    <p>
+      We proudly present this unique mixed-use building in Malé, Maldives. 
+      Discover our flexible floor options, robust ROI, and easy financing solutions.
+    </p>
+    <button class="btn-cover" onclick="document.getElementById('devProfile').scrollIntoView({behavior:'smooth'})">
+      View Proposal
+    </button>
+  </div>
+
+  <!-- SECTION: DEVELOPER PROFILE (moved above timeline) -->
+  <section id="devProfile" class="reveal">
+    <h2>About Landmark Development</h2>
+    <div class="section-content">
+      <h3>Our Professional Team</h3>
+      <p style="line-height:1.7;">
+        With experts—including architects, engineers, and project managers—Landmark 
+        Development excels in delivering top-quality constructions in the Maldives. 
+        We emphasize on-time delivery, cost-effective solutions, and rigorous safety 
+        standards across every project phase.
+      </p>
+
+      <h3>Company Capacity &amp; Staff</h3>
+      <p style="line-height:1.7;">
+        Our in-house design &amp; construction supervision ensures consistent quality 
+        from concept to handover. We maintain strong vendor relationships to guarantee 
+        reliable materials and services, enabling us to address both routine and 
+        specialized client requirements swiftly.
+      </p>
+
+      <h3>Notable Projects</h3>
+      <ul style="line-height:1.7;">
+        <li><strong>Hulhumale Lot 11269 (2019)</strong>: 3 story residential building with 95% occupancy in 6 months.</li>
+        <li><strong>Hulhumale lot 11245 (2021)</strong>: 6 story residential building featuring modern design &amp; eco-friendly tech.</li>
+        <li><strong>Hulhumale lot 11192 (2022)</strong>: 6 story end-user model serviced apartments.</li>
+        <li><strong>Ma.New Mexico (2023)</strong>: 10 story building with spacious and modern living facilities.</li>
+        <h3>In the pipeline</h3>
+        <li><strong>Manta Island (2025)</strong>: A modern mixed-use building with premium living facilities in Maafushi.</li>
+        <li><strong>Beach Village at Goidhoo (2025)</strong>: A 50,000 Sqft of tourist villa development.</li>
+      </ul>
+    </div>
+  </section>
+  
+  <!-- SECTION 1: EXEC SUMMARY -->
+  <section id="execSummary" class="reveal">
+    <h2>Executive Summary</h2>
+    <div class="section-content">
+      <p>
+        <strong>Property Overview:</strong> This 15-story building offers 9 floors 
+        for sale in prime Malé. Strategically located near MPL, Customs, and main 
+        wholesale markets. Suitable for diverse commercial or residential usage.
+      </p>
+      <p style="margin-top:1rem;">
+        <strong>Investment Potential:</strong> Malé’s thriving real estate market 
+        ensures stable rental income, plus capital appreciation potential. 
+        Floors can accommodate clinics, cafés, gyms, offices, or apartments.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECTION 2: LOCATION & DEVELOPMENT DETAILS -->
+  <section id="location" class="reveal">
+    <h2>Location &amp; Development Details</h2>
+    <div class="section-content">
+      <div class="site-container" style="display: flex; flex-wrap: wrap; gap: 2rem;">
+        <!-- Column 1: General Details -->
+        <div class="site-column" style="flex:1 1 300px; background-color: var(--card-color); padding:1rem; border-radius:6px; border:1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <h4 style="margin-bottom:0.5rem; color:var(--accent-color);">General Info</h4>
+          <ul style="line-height:1.7;">
+            <li>Land Area: <strong>2,850 sqft</strong></li>
+            <li>Floor Area (gross): <strong>2,850 sqft</strong> typical floors</li>
+            <li>Usable Rental: <strong>2,273 sqft</strong> per floor</li>
+            <li>Building will have 2 Lifts to cater to multiple clients</li>
+            <li>Building has a dedicated garbage area and a fire pump system along with its own transformer system for stable power supply</li>
+          </ul>
+        </div>
+
+        <!-- Column 2: Floor Breakdown -->
+        <div class="site-column" style="flex:1 1 300px; background-color: var(--card-color); padding:1rem; border-radius:6px; border:1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <h4 style="margin-bottom:0.5rem; color:var(--accent-color);">Floor Breakdown &amp; Usage</h4>
+          <ul style="line-height:1.7;">
+            <li>Ground+Basement+Mezz: <strong>~4,000 sqft</strong></li>
+            <li>Floors 1–8: <strong>2,850 sqft each</strong> (2,273 usable)</li>
+            <li>All 9 floors: <strong>~25,650 sqft total</strong></li>
+          </ul>
+          <p style="margin-top:1rem;">
+            <em>Flexible usage:</em> Clinics, cafés, restaurants, gyms, offices, or apartments 
+            (local restrictions apply). Landmark offers <strong>discounted interior renovation</strong> 
+            if needed.
+          </p>
+        </div>
+      </div>
+
+      <h3>Maps</h3>
+      <div class="slider-container reveal">
+        <div class="slider-wrapper" id="sliderWrapper">
+          <div class="slider-slide">
+            <img src="https://i.postimg.cc/vHzYm6tw/temp-Image-B3-Ft-H6.avif" alt="Map 1">
+          </div>
+          <div class="slider-slide">
+            <img src="https://i.postimg.cc/5989ZrH0/temp-Image-LRSpot.avif" alt="Map 2">
+          </div>
+        </div>
+        <div class="slider-nav">
+          <button onclick="prevSlide()">&#10094;</button>
+          <button onclick="nextSlide()">&#10095;</button>
+        </div>
+      </div>
+
+      <h3>Site Drawings</h3>
+      <div class="slider-container reveal">
+        <div class="slider-wrapper">
+          <!-- Add site drawings if available -->
+          <div class="slider-slide">
+            <img src="https://i.postimg.cc/PJ1fSnTZ/temp-Imagee-R8-LSW.avif" alt="Site Drawing 1">
+          </div>
+        </div>
+      </div>
+
+      <h3>Renders</h3>
+      <div class="slider-container reveal">
+        <div class="slider-wrapper">
+          <!-- Add more renders as needed -->
+          <div class="slider-slide">
+            <img src="https://i.postimg.cc/XvDvJgsZ/temp-Imagee-D8pz-F.avif" alt="Render 1">
+          </div>
+        </div>
+      </div>
+      <!-- Nearby Places -->
+      <h3>Nearby Places & Travel Distances</h3>
+      <div class="site-container" style="display: flex; flex-wrap: wrap; gap: 2rem;">
+        <!-- Column 1: Key Locations -->
+        <div class="site-column" style="flex: 1 1 300px; background-color: var(--card-color); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <h4 style="margin-bottom: 0.5rem; color:var(--accent-color);">Key Locations</h4>
+          <ul style="line-height: 1.7;">
+            <li><strong>Civil Court</strong> - <span style="color: var(--accent-color);">5 min drive</span></li>
+            <li><strong>Maldives Customs Service</strong> - <span style="color: var(--accent-color);">8 min walk</span></li>
+            <li><strong>Maldives Ports Limited</strong> - <span style="color: var(--accent-color);">9 min walk</span></li>
+            <li><strong>STO Trade Center</strong> - <span style="color: var(--accent-color);">10 min walk</span></li>
+            <li><strong>AMDC Clinic</strong> - <span style="color: var(--accent-color);">2 min walk</span></li> 
+          </ul>
+        </div>
+        <!-- Column 2: Transport & Connectivity -->
+        <div class="site-column" style="flex: 1 1 300px; background-color: var(--card-color); padding: 1rem; border-radius:6px; border:1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <h4 style="margin-bottom: 0.5rem; color:var(--accent-color);">Transport & Connectivity</h4>
+          <ul style="line-height: 1.7;">
+            <li><strong>Jetty No. 1 (Ferries & Boats)</strong> - <span style="color: var(--accent-color);">7 min walk</span></li>
+            <li><strong>Velana International Airport</strong> - <span style="color: var(--accent-color);">10 min drive</span></li>
+            <li><strong>Bus Terminal</strong> - <span style="color: var(--accent-color);">6 min walk</span></li>
+            <li><strong>Sinamale Bridge Access</strong> - <span style="color: var(--accent-color);">9 min drive</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 3: PRICING & PAYMENT -->
+  <section id="pricing" class="reveal">
+    <h2>Pricing &amp; Payment</h2>
+    <div class="section-content">
+      <div class="pricing-container">
+        <!-- Column 1: Pricing -->
+        <div class="pricing-column">
+          <h4>Sale Prices (Incl. GST for ROI)</h4>
+          <ul style="line-height:1.7;">
+            <li>Floors 1–8: <strong>MVR 6.5m +8%</strong> → ~MVR 7.02m each</li>
+            <li>Ground+Basement+Mezz: <strong>MVR 13.5m +8%</strong> → ~MVR 14.58m</li>
+            <li>All 9 Floors: <strong>MVR 60.5m +8%</strong> → ~MVR 65.34m</li>
+          </ul>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">
+            *ROI calculations assume these GST-inclusive amounts as total cost.
+          </p>
+        </div>
+
+        <!-- Column 2: Payment & Financing -->
+        <div class="pricing-column">
+          <h4>Payment &amp; Financing</h4>
+          <ul style="line-height:1.7;">
+            <li><strong>Cash Option:</strong> 20% down, remainder on milestones</li>
+            <li><strong>Bank Financing:</strong> ~10.5% over 15–20 years</li>
+            <li><strong>Legal Fee:</strong> MVR 100,000 upon ownership change</li>
+          </ul>
+          <p style="margin-top:0.5rem;font-size:0.9rem;">
+            For mortgage estimates, see the <strong>Mortgage Calculator</strong> below.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MORTGAGE SECTION -->
+  <section id="mortgageCalc" class="reveal">
+    <h2>Mortgage Calculator</h2>
+    <div class="section-content">
+      <p>
+        Estimate monthly installments with GST-inclusive prices. Adjust your 
+        down payment from 0–100% (default 20%).
+      </p>
+      <!-- Down Payment Box -->
+      <div class="pricing-container" style="margin-bottom:1rem;">
+        <div class="pricing-column" id="downPaymentInfo">
+          <h4>Equity &amp; Financing</h4>
+          <div class="downPaymentContainer">
+            <label for="downPaymentRange">Down Payment (%):</label>
+            <input type="range" id="downPaymentRange" min="0" max="100" value="20" />
+            <span id="downPaymentLabel">20%</span>
+          </div>
+          <p style="margin-top:1rem;">
+            <strong>Loan Amount:</strong> <span id="loanAmount">--</span> MVR<br/>
+            <strong>Equity:</strong> <span id="equityAmount">--</span> MVR
+          </p>
+        </div>
+      </div>
+
+      <button class="btn" onclick="toggleMortgage()">View Mortgage Table</button>
+      <div id="mortgageSection">
+        <div class="mortgage-inputs">
+          <div>
+            <label for="mortgageOption"><strong>Property Option</strong></label>
+            <select id="mortgageOption">
+              <option value="fullProp">All 9 Floors (~65.34m inc. GST)</option>
+              <option value="ground">Ground Floor (~14.58m inc. GST)</option>
+              <option value="typical">Typical Floor (~7.02m inc. GST)</option>
+            </select>
+          </div>
+          <div>
+            <label for="interestRate"><strong>Interest Rate (%)</strong></label>
+            <input type="number" id="interestRate" value="10.5" />
+          </div>
+          <div>
+            <label for="loanYears"><strong>Loan Duration (yrs)</strong></label>
+            <input type="number" id="loanYears" value="15" />
+          </div>
+          <div>
+            <button class="btn" onclick="buildMortgageTable()">Calculate</button>
+          </div>
+        </div>
+
+        <!-- Mortgage Summary Row (above table) -->
+        <div id="mortgageSummaryRow" style="background-color: var(--card-color); margin-top:1rem; padding:1rem; border-radius:6px; border:1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+          <p id="mortgageSummaryText" style="margin:0; font-weight:600;"></p>
+        </div>
+        
+        <table id="mortgageTable" style="margin-top:1rem;">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Payment (MVR)</th>
+              <th>Interest</th>
+              <th>Principal</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Insert monthly rows here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: ROI & RENTAL PROJECTIONS -->
+  <section id="roiSection" class="reveal">
+    <h2>ROI &amp; Rental Projections</h2>
+    <div class="section-content">
+      <ul style="line-height:1.7;">
+        <li>We apply a discrete <strong>2% vacancy loss every 3 years</strong> (Years 3, 6, 9...).</li> 
+        <li>Rents rise 2% every 2 years.</li> 
+        <li>Maintenance is MVR 1,500/month/floor.</li> 
+        <li>Management fee (2%) is optional.</li>
+      </ul>
+      <div style="margin-bottom:1rem;">
+        <label>
+          <input type="checkbox" id="mgmtFeeToggle"> 
+          2% Management &amp; Rental Collection Fee
+        </label>
+        <br>
+        <label style="margin-top:0.5rem;">
+          <input type="checkbox" id="renovationToggle">
+          Estimated Renovation (~MVR 2 million)
+        </label>
+      </div>
+      <div style="margin:0.5rem 0;">
+        <label for="floorSelector"><strong>Select Floor Package:</strong></label>
+        <select id="floorSelector" style="margin-left:0.5rem;">
+          <option value="floorRegular">Typical Floor (~7.02m GST)</option>
+          <option value="floorGround">Ground+Mezz (~14.58m GST)</option>
+          <option value="fullProperty">All 9 Floors (~65.34m GST)</option>
+        </select>
+      </div>
+      <p>
+        <strong>Total Usable Sqft:</strong> <span id="totalSqftDisplay">2,273</span> sqft
+      </p>
+
+      <!-- Assumptions Section -->
+      <h3>Assumptions</h3>
+      <ul style="line-height:1.7;">
+        <li><strong>Rent Increase Rate:</strong> 2% every 2 years</li>
+        <li><strong>Vacancy Rate:</strong> 2% vacancy loss every 3 years</li>
+        <li><strong>Management Fee:</strong> 2% of annual rent (optional)</li>
+        <li><strong>Maintenance Costs:</strong> MVR 1,500 per floor per month</li>
+        <li><strong>Renovation Costs:</strong> Estimated at MVR 2 million (optional)</li>
+        <li><strong>Loan Interest Rate:</strong> 10.5% annually</li>
+        <li><strong>Loan Duration:</strong> 15 years</li>
+      </ul>
+
+      <!-- ROI Table -->
+      <table id="roiTable" style="margin-top:1.5rem;">
+        <thead>
+          <tr>
+            <th>Scenario <br><small>(Sqft Price)</small></th>
+            <th>Monthly Rent</th>
+            <th>Annual Rent</th>
+            <th>Net Income</th>
+            <th>Annual ROI (%)</th>
+            <th><strong>Recovery (yrs)</strong></th>
+          </tr>
+        </thead>
+        <tbody><!-- Inserted by JS --></tbody>
+      </table>
+
+      <!-- Charts for ROI and Rent vs Expenses -->
+      <h3>ROI Over 10 Years</h3>
+      <canvas id="roiChart" width="400" height="200"></canvas>
+
+      <h3>Annual Rent vs. Expenses</h3>
+      <canvas id="rentExpensesChart" width="400" height="200"></canvas>
+
+      <!-- 10-Year Breakdown -->
+      <button class="btn" style="margin-top:1.5rem;" onclick="toggleTenYearBreakdown()">
+        View 10-Year Detailed Breakdown
+      </button>
+      <div id="tenYearBreakdown">
+        <h3>10-Year Detailed Breakdown</h3>
+        <p>
+          Except for the Monthly Rent, all other figures stated are on a yearly basis.
+        </p>
+        <div id="tenYearTables"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: RESALE & EXIT STRATEGY -->
+  <section id="exit" class="reveal">
+    <h2>Resale &amp; Exit Strategy</h2>
+    <div class="section-content">
+      <p>
+        Below are short, mid, and long-term hold scenarios.
+      </p>
+      <div id="exitShortTerm" style="margin-top:1rem;">
+        <h3>Short-Term (Years 3–8)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Holding (yrs)</th>
+              <th>Total Net Rent</th>
+              <th>Resale Price</th>
+              <th>Profit</th>
+            </tr>
+          </thead>
+          <tbody id="shortTermBody"><!-- Insert rows --></tbody>
+        </table>
+      </div>
+
+      <div id="exitMidTerm" style="margin-top:1rem;">
+        <h3>Mid-Term (Years 8–18) [15 years]</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Holding (yrs)</th>
+              <th>Total Net Rent</th>
+              <th>Resale Price</th>
+              <th>Profit</th>
+            </tr>
+          </thead>
+          <tbody id="midTermBody"><!-- Insert rows --></tbody>
+        </table>
+      </div>
+
+      <div id="exitLongTerm" style="margin-top:1rem;">
+        <h3>Long-Term (Years 18–30) [25 years]</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Holding (yrs)</th>
+              <th>Total Net Rent</th>
+              <th>Resale Price</th>
+              <th>Profit</th>
+            </tr>
+          </thead>
+          <tbody id="longTermBody"><!-- Insert rows --></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: CONSTRUCTION TIMELINE -->
+  <section id="timeline" class="reveal">
+    <h2>Construction Timeline</h2>
+    <div class="section-content">
+      <h3>Project Milestones</h3>
+      <ul style="line-height:1.7;">
+        <li><strong>Q4 2023:</strong> Agreement Signed</li>
+        <li><strong>Q4 2024:</strong> Drawings Submitted for Approval</li>
+      </ul>
+      <h3>Construction Begins <strong>Q3 2025</strong></h3>
+      <p>
+        Upon permit approvals, the construction phase commences with the following milestones:
+      </p>
+      <ul style="line-height:1.7;">
+        <li><strong>Q3 2025:</strong> Demolition &amp; Design Finalization, Site Mobilization</li>
+        <li><strong>Q4 2025:</strong> Basement &amp; Foundation Works, Partial Floor Slabs</li>
+        <li><strong>Q1 2026:</strong> Concrete Slab Works (Floors 1–4), Façade Preparation</li>
+        <li><strong>Q2 2026:</strong> Floors 5–8, Façade Cladding &amp; Finishing</li>
+        <li><strong>Q3 2026:</strong> Plumbing, Lift Installation, Doors &amp; Windows</li>
+        <li><strong>Q4 2026:</strong> Interior Works, Electrical &amp; MEP Systems</li>
+        <li><strong>Q1 2027:</strong> Final Façade Finishing, Commissioning, Handover</li>
+      </ul>
+      <p style="margin-top:1rem;">
+        <em>Early possession</em> for completed floors is possible to start fit-out or rentals.
+      </p>
+
+      <!-- Gantt Chart for Construction Timeline -->
+      <h3>Project Timeline</h3>
+      <div id="ganttChart"></div>
+    </div>
+  </section>
+
+  <!-- SECTION: WHY INVEST? -->
+  <section id="whyInvest" class="reveal">
+    <h2>Why Invest in This Property?</h2>
+    <div class="section-content">
+      <p>
+        Investing in this premium property offers a unique opportunity to secure high returns in the thriving Malé real estate market.
+        Here’s why this project stands out:
+      </p>
+      <ul style="line-height:1.7;">
+        <li><strong>Prime Location:</strong> Situated near Malé’s key business hubs and transport links.</li>
+        <li><strong>High Rental Yield:</strong> Projected rental returns of <strong>8% - 12%</strong> annually.</li>
+        <li><strong>Capital Appreciation:</strong> Property values in Malé have increased by <strong>5-8% per year</strong>.</li>
+        <li><strong>Strong Developer Track Record:</strong> Landmark Development has successfully delivered multiple high-end projects.</li>
+        <li><strong>Flexible Payment Plans:</strong> Multiple financing options available, including bank mortgage support.</li>
+        <li><strong>Turnkey Investment:</strong> Fully managed property with optional rental management services.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- SECTION: NEXT STEPS -->
+  <section id="nextSteps" class="reveal">
+    <h2>Next Steps & How to Get Involved</h2>
+    <div class="section-content">
+      <p>
+        Ready to invest? Follow these steps to secure your unit in this exclusive development:
+      </p>
+      <div class="pricing-container">
+        <!-- Step 1 -->
+        <div class="pricing-column">
+          <h4>Step 1: Schedule a Consultation</h4>
+          <p>Contact our investment team to discuss pricing, financing, and available units.</p>
+          <button class="btn" onclick="window.location.href='mailto:a@landmark.com.mv'">Contact Us</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="pricing-column">
+          <h4>Step 2: Site Visit & Due Diligence</h4>
+          <p>Book a visit to our project site in Malé and review detailed plans with our team.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="pricing-column">
+          <h4>Step 3: Reservation & Payment</h4>
+          <p>Reserve your unit with an initial deposit and finalize ownership transfer.</p>
+        </div>
+      </div>
+      <p style="margin-top:1rem;">
+        <em>For inquiries, email us at <a href="mailto:a@landmark.com.mv">a@landmark.com.mv</a> or call <strong>+960 XXXX XXXX</strong>.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 Landmark Development Pvt Ltd | 
+      <a href="mailto:a@landmark.com.mv" style="color:var(--text-color);">a@landmark.com.mv</a>
+    </p>
+    <!-- Print Button -->
+    <button class="print-btn" onclick="window.print()">
+      Print This Proposal
+    </button>
+  </footer>
+
+  <!-- JavaScript: ROI, Toggles, Discrete Vacancy, Mortgage, etc. -->
+  <script>
+    /************************************************************
+     * 1. Basic Data & Pricing
+     ************************************************************/
+    const scenarioRates = { Low:25, Base:40, High:50 };
+    const floorPackages = {
+      floorRegular: { sqft:2273, purchasePrice:7020000 },
+      floorGround:  { sqft:4000, purchasePrice:14580000 },
+      fullProperty: { sqft: (2273*8 + 4000), purchasePrice:65340000 }
+    };
+    const mgmtFeeRate=2,
+          renovationCost=2000000,
+          monthlyMaintenanceFee=1500,
+          rentIncreaseRate=0.02;
+
+    // Discrete 2% vacancy every 3rd year
+    function getVacancyLoss(year, annualRent) {
+      return (year%3===0) ? (annualRent*0.02) : 0;
+    }
+
+    /************************************************************
+     * 2. MAIN ROI TABLE
+     ************************************************************/
+    function updateROI() {
+      const floorKey= document.getElementById('floorSelector').value;
+      const floorData= floorPackages[floorKey];
+      const mgmtActive= document.getElementById('mgmtFeeToggle').checked;
+      const renovationActive= document.getElementById('renovationToggle').checked;
+
+      document.getElementById('totalSqftDisplay').textContent= floorData.sqft.toLocaleString();
+
+      let totalPurchase= floorData.purchasePrice;
+      if(renovationActive) totalPurchase += renovationCost;
+
+      const roiTableBody= document.querySelector('#roiTable tbody');
+      roiTableBody.innerHTML= '';
+
+      Object.entries(scenarioRates).forEach(([scenarioName, sqftPrice])=>{
+        let monthlyRent= sqftPrice * floorData.sqft;
+        let annualRent= monthlyRent * 12;
+        // No discrete vacancy in Year1 summary row
+        let vacancyLoss= 0; 
+        let mgmtFee= mgmtActive ? (annualRent * mgmtFeeRate / 100) : 0;
+        let maintenanceYearly= monthlyMaintenanceFee * 12;
+        let netIncome= annualRent - vacancyLoss - mgmtFee - maintenanceYearly;
+
+        let annualROI=0;
+        if(totalPurchase>0) {
+          annualROI= Math.round((netIncome / totalPurchase) * 100);
+        }
+        let recovery= netIncome>0 ? (totalPurchase / netIncome).toFixed(1) : '∞';
+
+        const tr= document.createElement('tr');
+        tr.innerHTML=`
+          <td>${scenarioName} <br><small>(${sqftPrice} MVR/sqft)</small></td>
+          <td>${Math.round(monthlyRent).toLocaleString()}</td>
+          <td>${Math.round(annualRent).toLocaleString()}</td>
+          <td>${Math.round(netIncome).toLocaleString()}</td>
+          <td>${annualROI}%</td>
+          <td><strong>${recovery} yrs</strong></td>
+        `;
+        roiTableBody.appendChild(tr);
+      });
+
+      // If the 10-year breakdown is open, rebuild it
+      if(document.getElementById('tenYearBreakdown').style.display==='block') {
+        buildTenYearTables();
+      }
+    }
+
+    /************************************************************
+     * 3. TEN-YEAR BREAKDOWN (discrete vacancy)
+     ************************************************************/
+    function toggleTenYearBreakdown() {
+      const div= document.getElementById('tenYearBreakdown');
+      if(div.style.display===''|| div.style.display==='none'){
+        div.style.display='block';
+        buildTenYearTables();
+      } else {
+        div.style.display='none';
+      }
+    }
+
+    function buildTenYearTables(){
+      const container= document.getElementById('tenYearTables');
+      container.innerHTML= '';
+
+      const floorKey= document.getElementById('floorSelector').value;
+      const floorData= floorPackages[floorKey];
+      const mgmtActive= document.getElementById('mgmtFeeToggle').checked;
+
+      Object.entries(scenarioRates).forEach(([scenarioName, sqftPrice])=>{
+        const scenarioDiv= document.createElement('div');
+        scenarioDiv.style.marginBottom= '1.5rem';
+
+        const header= document.createElement('h4');
+        header.textContent= `${scenarioName} Scenario (${sqftPrice} MVR/sqft) - Over 10 Years`;
+        scenarioDiv.appendChild(header);
+
+        const table= document.createElement('table');
+        table.style.width='100%';
+        table.innerHTML= `
+          <thead>
+            <tr style="background-color: var(--accent-color); color: #FFFFFF;">
+              <th style="padding:0.6rem;">Year</th>
+              <th>Monthly Rent</th>
+              <th>Vacancy Loss</th>
+              <th>Mgmt Fee</th>
+              <th>Maintenance</th>
+              <th>Net Income</th>
+              <th>Cumulative</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+        scenarioDiv.appendChild(table);
+        const tbody= table.querySelector('tbody');
+
+        let monthlyRent= sqftPrice * floorData.sqft;
+        let cumulative=0;
+
+        for(let y=1; y<=10; y++){
+          // escalate every 2 yrs
+          if(y>1 && (y%2===1)) {
+            monthlyRent *= (1 + rentIncreaseRate);
+          }
+          let annualRent= monthlyRent * 12;
+          let vacancy= (y%3===0) ? (annualRent * 0.02) : 0;
+          let mgmtFeeVal= mgmtActive ? (annualRent * mgmtFeeRate / 100) : 0;
+          let maintenanceYearly= monthlyMaintenanceFee * 12;
+          let net= annualRent - vacancy - mgmtFeeVal - maintenanceYearly;
+          cumulative += net;
+
+          const tr= document.createElement('tr');
+          tr.innerHTML= `
+            <td style="padding:0.6rem;">Year ${y}</td>
+            <td>${Math.round(monthlyRent).toLocaleString()}</td>
+            <td>${Math.round(vacancy).toLocaleString()}</td>
+            <td>${Math.round(mgmtFeeVal).toLocaleString()}</td>
+            <td>${maintenanceYearly.toLocaleString()}</td>
+            <td>${Math.round(net).toLocaleString()}</td>
+            <td>${Math.round(cumulative).toLocaleString()}</td>
+          `;
+          tbody.appendChild(tr);
+        }
+        container.appendChild(scenarioDiv);
+      });
+    }
+
+    /************************************************************
+     * 4. EXIT STRATEGY
+     ************************************************************/
+    function buildExitTables() {
+      const shortTermBody= document.getElementById('shortTermBody');
+      const midTermBody= document.getElementById('midTermBody');
+      const longTermBody= document.getElementById('longTermBody');
+      
+      shortTermBody.innerHTML= '';
+      midTermBody.innerHTML= '';
+      longTermBody.innerHTML= '';
+
+      Object.entries(scenarioRates).forEach(([scenarioName, sqftPrice])=>{
+        // short => 6 yrs
+        const shortVal= exitCalc(scenarioName, sqftPrice, 6);
+        // mid => 15 yrs
+        const midVal= exitCalc(scenarioName, sqftPrice, 15);
+        // long => 25 yrs
+        const longVal= exitCalc(scenarioName, sqftPrice, 25);
+
+        const sTR= document.createElement('tr');
+        sTR.innerHTML=`
+          <td>${scenarioName}</td>
+          <td>6</td>
+          <td>${shortVal.totalRent.toLocaleString()}</td>
+          <td>${shortVal.resaleValue.toLocaleString()}</td>
+          <td>${shortVal.profit.toLocaleString()}</td>
+        `;
+        shortTermBody.appendChild(sTR);
+
+        const mTR= document.createElement('tr');
+        mTR.innerHTML=`
+          <td>${scenarioName}</td>
+          <td>15</td>
+          <td>${midVal.totalRent.toLocaleString()}</td>
+          <td>${midVal.resaleValue.toLocaleString()}</td>
+          <td>${midVal.profit.toLocaleString()}</td>
+        `;
+        midTermBody.appendChild(mTR);
+
+        const lTR= document.createElement('tr');
+        lTR.innerHTML=`
+          <td>${scenarioName}</td>
+          <td>25</td>
+          <td>${longVal.totalRent.toLocaleString()}</td>
+          <td>${longVal.resaleValue.toLocaleString()}</td>
+          <td>${longVal.profit.toLocaleString()}</td>
+        `;
+        longTermBody.appendChild(lTR);
+      });
+    }
+
+    function exitCalc(scenarioName, sqftPrice, yrs) {
+      const floorKey= document.getElementById('floorSelector').value;
+      const floorData= floorPackages[floorKey];
+      const mgmtActive= document.getElementById('mgmtFeeToggle').checked;
+      const renovationActive= document.getElementById('renovationToggle').checked;
+
+      let basePrice= floorData.purchasePrice;
+      if(renovationActive) basePrice += renovationCost;
+
+      // appreciation every 2 years by 2%
+      let periods= Math.floor(yrs/2);
+      let finalVal= basePrice;
+      for(let i=0; i<periods; i++){
+        finalVal *= (1 + rentIncreaseRate);
+      }
+
+      // net rent w/ discrete vacancy
+      let monthlyRent= sqftPrice * floorData.sqft;
+      let totalRent=0;
+      for(let y=1; y<= yrs; y++){
+        if(y>1 && (y%2===1)) {
+          monthlyRent *= (1 + rentIncreaseRate);
+        }
+        let annualRent= monthlyRent * 12;
+        let vacancy= (y%3===0) ? (annualRent * 0.02) : 0; 
+        let mgmtFeeVal= mgmtActive ? (annualRent * mgmtFeeRate / 100) : 0;
+        let maintenanceYearly= monthlyMaintenanceFee * 12;
+        let net= annualRent - vacancy - mgmtFeeVal - maintenanceYearly;
+        totalRent += net;
+      }
+      let profit= (finalVal + totalRent) - basePrice;
+
+      return {
+        totalRent: Math.round(totalRent),
+        resaleValue: Math.round(finalVal),
+        profit: Math.round(profit)
+      };
+    }
+
+    /************************************************************
+     * 5. MORTGAGE 
+     ************************************************************/
+    function toggleMortgage(){
+      const sec= document.getElementById('mortgageSection');
+      sec.style.display= (sec.style.display===''|| sec.style.display==='none')? 'block': 'none';
+    }
+
+    // Update the label & table on slider move
+    function downPaymentSlider(){
+      const dpRange= document.getElementById('downPaymentRange');
+      const dpLabel= document.getElementById('downPaymentLabel');
+      dpLabel.textContent= dpRange.value + '%';
+      updateDownPaymentInfo();
+      buildMortgageTable();
+    }
+
+    function updateDownPaymentInfo(){
+      const dpVal= parseFloat(document.getElementById('downPaymentRange').value)||20;
+      const mortgageOption= document.getElementById('mortgageOption').value;
+
+      let price=0;
+      if(mortgageOption==='fullProp') price=65340000;
+      else if(mortgageOption==='ground') price=14580000;
+      else price=7020000;
+
+      let dpAmount= Math.round(price * (dpVal / 100));
+      let financed= price - dpAmount;
+
+      document.getElementById('loanAmount').textContent= financed.toLocaleString();
+      document.getElementById('equityAmount').textContent= dpAmount.toLocaleString();
+    }
+
+    function buildMortgageTable(){
+      const mortgageTableBody= document.querySelector('#mortgageTable tbody');
+      mortgageTableBody.innerHTML= '';
+
+      const mortgageOption= document.getElementById('mortgageOption').value;
+      const interestRate= parseFloat(document.getElementById('interestRate').value)/100 || 0.105;
+      const loanYears= parseInt(document.getElementById('loanYears').value) || 15;
+
+      const dpVal= parseFloat(document.getElementById('downPaymentRange').value)||20;
+
+      let price=0;
+      if(mortgageOption==='fullProp') price=65340000;
+      else if(mortgageOption==='ground') price=14580000;
+      else price=7020000;
+
+      let downPayment= Math.round(price * (dpVal / 100));
+      let financedAmount= price - downPayment;
+
+      // show summary above table
+      const summary= document.getElementById('mortgageSummaryText');
+      summary.innerHTML=`
+        Property Price (incl. GST): ${price.toLocaleString()} 
+        | Down Payment (${dpVal}%): ${downPayment.toLocaleString()}
+        | Loan Amount: ${financedAmount.toLocaleString()}
+      `;
+
+      let monthlyRate= interestRate / 12;
+      let numMonths= loanYears * 12;
+      let monthlyPayment=0;
+      if(monthlyRate>0){
+        monthlyPayment= financedAmount * (monthlyRate / (1 - Math.pow(1 + monthlyRate, -numMonths)));
+      } else {
+        monthlyPayment= financedAmount / numMonths;
+      }
+      let balance= financedAmount;
+
+      for(let m=1; m<=numMonths; m++){
+        let interestPortion= balance * monthlyRate;
+        let principalPortion= monthlyPayment - interestPortion;
+        balance -= principalPortion;
+        if(balance < 0) balance = 0;
+
+        const row= document.createElement('tr');
+        row.innerHTML=`
+          <td>${m}</td>
+          <td>${Math.round(monthlyPayment).toLocaleString()}</td>
+          <td>${Math.round(interestPortion).toLocaleString()}</td>
+          <td>${Math.round(principalPortion).toLocaleString()}</td>
+          <td>${Math.round(balance).toLocaleString()}</td>
+        `;
+        mortgageTableBody.appendChild(row);
+        if(balance <= 0) break;
+      }
+    }
+
+    /************************************************************
+     * 6. SLIDER IMAGES
+     ************************************************************/
+    let currentSlide=0;
+    const totalSlides=2; // for the first Maps slider
+    function showSlide(index){
+      const sliderWrapper= document.getElementById('sliderWrapper');
+      if(!sliderWrapper) return;
+      if(index<0) index= totalSlides-1;
+      if(index>= totalSlides) index=0;
+      currentSlide= index;
+      const offset= -1 * currentSlide * parseInt(getComputedStyle(sliderWrapper).width) / totalSlides;
+      sliderWrapper.style.transform= 'translateX('+ offset +'px)';
+    }
+    function prevSlide(){ showSlide(currentSlide-1);}
+    function nextSlide(){ showSlide(currentSlide+1);}
+
+    /************************************************************
+     * 7. INIT & Reveal Animations
+     ************************************************************/
+    function init() {
+      // ROI + EXIT TABLE INIT
+      document.getElementById('floorSelector').addEventListener('change', updateROI);
+      document.getElementById('mgmtFeeToggle').addEventListener('change', updateROI);
+      document.getElementById('renovationToggle').addEventListener('change', updateROI);
+
+      document.getElementById('mortgageOption').addEventListener('change', ()=> {
+        updateDownPaymentInfo();
+        buildMortgageTable();
+      });
+      document.getElementById('interestRate').addEventListener('change', buildMortgageTable);
+      document.getElementById('loanYears').addEventListener('change', buildMortgageTable);
+      document.getElementById('downPaymentRange').addEventListener('input', downPaymentSlider);
+
+      updateROI();
+      buildExitTables();
+      updateDownPaymentInfo();
+      buildMortgageTable();
+      showSlide(0);
+      buildTimeline(); // Initialize the timeline
+
+      // Theme Toggle
+      const themeSwitch= document.getElementById('themeSwitch');
+      themeSwitch.addEventListener('change', toggleTheme);
+
+      // Apply saved theme preference
+      const savedTheme= localStorage.getItem('theme') || 'dark';
+      if(savedTheme === 'light'){
+        document.body.classList.add('light-mode');
+        themeSwitch.checked = true;
+      } else {
+        document.body.classList.remove('light-mode');
+        themeSwitch.checked = false;
+      }
+
+      // Intersection Observer for reveals
+      const revealObserver = new IntersectionObserver((entries)=>{
+        entries.forEach(entry=>{
+          if(entry.isIntersecting){
+            entry.target.classList.add('active');
+          }
+        });
+      }, {
+        threshold: 0.1
+      });
+
+      // Observe all .reveal elements
+      document.querySelectorAll('.reveal').forEach(el=>{
+        revealObserver.observe(el);
+      });
+
+      // Observe the sliders so they fade in
+      document.querySelectorAll('.slider-container').forEach(slider=>{
+        revealObserver.observe(slider);
+      });
+
+      // Generate Charts
+      generateROICanvas();
+      generateRentExpensesCanvas();
+    }
+
+    function toggleTheme(){
+      document.body.classList.toggle('light-mode');
+      // Save the user's preference in localStorage
+      if(document.body.classList.contains('light-mode')){
+        localStorage.setItem('theme', 'light');
+      } else {
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    /************************************************************
+     * 8. Generating Charts
+     ************************************************************/
+    // Function to generate ROI Line Chart
+    function generateROICanvas() {
+      const ctx = document.getElementById('roiChart').getContext('2d');
+      const labels = [];
+      const roiData = [];
+
+      for(let y=1; y<=10; y++){
+        labels.push(`Year ${y}`);
+        // Example ROI progression; replace with dynamic data if available
+        roiData.push(40 + y * 2); // Placeholder data
+      }
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Annual ROI (%)',
+            data: roiData,
+            borderColor: '#0EAC9F',
+            backgroundColor: 'rgba(14, 172, 159, 0.1)',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            title: {
+              display: false,
+              text: 'ROI Over 10 Years'
+            }
+          }
+        }
+      });
+    }
+
+    // Function to generate Rent vs Expenses Bar Chart
+    function generateRentExpensesCanvas() {
+      const ctx = document.getElementById('rentExpensesChart').getContext('2d');
+      const labels = [];
+      const rentData = [];
+      const expensesData = [];
+
+      for(let y=1; y<=10; y++){
+        labels.push(`Year ${y}`);
+        // Example data; replace with dynamic calculations
+        rentData.push(500000 + y * 20000); // Placeholder Annual Rent
+        expensesData.push(150000 + y * 5000); // Placeholder Annual Expenses
+      }
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Annual Rent (MVR)',
+              data: rentData,
+              backgroundColor: '#0EAC9F'
+            },
+            {
+              label: 'Annual Expenses (MVR)',
+              data: expensesData,
+              backgroundColor: '#DAA520'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            title: {
+              display: false,
+              text: 'Annual Rent vs. Expenses'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    /************************************************************
+     * 9. Generating Gantt Chart
+     ************************************************************/
+    function generateGanttChart() {
+      const tasks = [
+        {
+          id: 'Agreement',
+          name: 'Agreement Signed',
+          start: '2023-10-01',
+          end: '2023-12-31',
+          progress: 100,
+          dependencies: ''
+        },
+        {
+          id: 'Drawings',
+          name: 'Drawings Submitted for Approval',
+          start: '2024-10-01',
+          end: '2024-12-31',
+          progress: 100,
+          dependencies: 'Agreement'
+        },
+        {
+          id: 'Construction Start',
+          name: 'Construction Begins',
+          start: '2025-07-01',
+          end: '2025-07-01',
+          progress: 0,
+          dependencies: 'Drawings'
+        },
+        {
+          id: 'Demolition',
+          name: 'Demolition & Design Finalization, Site Mobilization',
+          start: '2025-07-01',
+          end: '2025-09-30',
+          progress: 0,
+          dependencies: 'Construction Start'
+        },
+        {
+          id: 'Basement',
+          name: 'Basement & Foundation Works, Partial Floor Slabs',
+          start: '2025-10-01',
+          end: '2025-12-31',
+          progress: 0,
+          dependencies: 'Demolition'
+        },
+        {
+          id: 'Concrete Slab',
+          name: 'Concrete Slab Works (Floors 1–4), Façade Preparation',
+          start: '2026-01-01',
+          end: '2026-03-31',
+          progress: 0,
+          dependencies: 'Basement'
+        },
+        {
+          id: 'Floors 5-8',
+          name: 'Floors 5–8, Façade Cladding & Finishing',
+          start: '2026-04-01',
+          end: '2026-06-30',
+          progress: 0,
+          dependencies: 'Concrete Slab'
+        },
+        {
+          id: 'Plumbing',
+          name: 'Plumbing, Lift Installation, Doors & Windows',
+          start: '2026-07-01',
+          end: '2026-09-30',
+          progress: 0,
+          dependencies: 'Floors 5-8'
+        },
+        {
+          id: 'Interior',
+          name: 'Interior Works, Electrical & MEP Systems',
+          start: '2026-10-01',
+          end: '2026-12-31',
+          progress: 0,
+          dependencies: 'Plumbing'
+        },
+        {
+          id: 'Handover',
+          name: 'Final Façade Finishing, Commissioning, Handover',
+          start: '2027-01-01',
+          end: '2027-03-31',
+          progress: 0,
+          dependencies: 'Interior'
+        }
+      ];
+
+      const gantt = new Gantt("#ganttChart", tasks, {
+        view_mode: 'Month',
+        date_format: 'YYYY-MM-DD',
+        custom_popup_html: function(task) {
+          return `
+            <div class="details-container">
+              <h5>${task.name}</h5>
+              <p><strong>Start:</strong> ${task.start}</p>
+              <p><strong>End:</strong> ${task.end}</p>
+              <p><strong>Progress:</strong> ${task.progress}%</p>
+            </div>
+          `;
+        }
+      });
+    }
+
+    function buildTimeline() {
+      generateGanttChart();
+    }
+
+    /************************************************************
+     * 8. Generating Charts
+     ************************************************************/
+    // Function to generate ROI Line Chart
+    function generateROICanvas() {
+      const ctx = document.getElementById('roiChart').getContext('2d');
+      const labels = [];
+      const roiData = [];
+
+      for(let y=1; y<=10; y++){
+        labels.push(`Year ${y}`);
+        // Example ROI progression; replace with dynamic data if available
+        roiData.push(40 + y * 2); // Placeholder data
+      }
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Annual ROI (%)',
+            data: roiData,
+            borderColor: '#0EAC9F',
+            backgroundColor: 'rgba(14, 172, 159, 0.1)',
+            fill: true,
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            title: {
+              display: false,
+              text: 'ROI Over 10 Years'
+            }
+          }
+        }
+      });
+    }
+
+    // Function to generate Rent vs Expenses Bar Chart
+    function generateRentExpensesCanvas() {
+      const ctx = document.getElementById('rentExpensesChart').getContext('2d');
+      const labels = [];
+      const rentData = [];
+      const expensesData = [];
+
+      for(let y=1; y<=10; y++){
+        labels.push(`Year ${y}`);
+        // Example data; replace with dynamic calculations
+        rentData.push(500000 + y * 20000); // Placeholder Annual Rent
+        expensesData.push(150000 + y * 5000); // Placeholder Annual Expenses
+      }
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Annual Rent (MVR)',
+              data: rentData,
+              backgroundColor: '#0EAC9F'
+            },
+            {
+              label: 'Annual Expenses (MVR)',
+              data: expensesData,
+              backgroundColor: '#DAA520'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+            title: {
+              display: false,
+              text: 'Annual Rent vs. Expenses'
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+  </script>
+
+</body>
+</html>
